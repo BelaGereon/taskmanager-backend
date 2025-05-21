@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 @Service
 public class TaskService {
@@ -22,12 +21,8 @@ public class TaskService {
 
     public List<TaskResponseDTO> getAllTasksAsDTOs() {
         return tasks.stream()
-                .map(convertTaskToResponseDto())
+                .map(TaskService::createDtoFromTaskEntity)
                 .toList();
-    }
-
-    private static Function<Task, TaskResponseDTO> convertTaskToResponseDto() {
-        return task -> new TaskResponseDTO(task.getId(), task.getTitle(), task.getDescription());
     }
 
     public Task createTask(Task task) {
@@ -80,11 +75,15 @@ public class TaskService {
         Task createdTask = new Task(taskId, requestDTO.getTitle(), requestDTO.getDescription());
         tasks.add(createdTask);
 
-        return new TaskResponseDTO(createdTask.getId(), createdTask.getTitle(), createdTask.getDescription());
+        return createDtoFromTaskEntity(createdTask);
     }
 
     public TaskResponseDTO getTaskByIdAsDto(int id) {
         Task task = getTaskById(id);
+        return createDtoFromTaskEntity(task);
+    }
+
+    private static TaskResponseDTO createDtoFromTaskEntity(Task task) {
         return new TaskResponseDTO(task.getId(), task.getTitle(), task.getDescription());
     }
 }
