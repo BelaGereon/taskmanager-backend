@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -54,7 +53,8 @@ public class TaskControllerIntegrationTests {
         sendPostRequestWithTaskObject(task3);
 
         String taskListJson = objectMapper.writeValueAsString(List.of(task1, task2, task3));
-        mockMvc.perform(get("/tasks")).andExpect(status().isOk())
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
                 .andExpect(content().json(taskListJson));
     }
 
@@ -72,5 +72,20 @@ public class TaskControllerIntegrationTests {
 
     private String createJsonFromTask(Task task) throws JsonProcessingException {
         return objectMapper.writeValueAsString(task);
+    }
+
+    @Test
+    void shouldUpdateTask() throws Exception {
+        Task taskToBeUpdated = new Task(1, "Original Title", "Original Description");
+        sendPostRequestWithTaskObject(taskToBeUpdated);
+
+        Task updatedTask = new Task(1, "Updated Title", "Updated Description");
+        String updatedTaskJson = createJsonFromTask(updatedTask);
+
+        mockMvc.perform(put("/tasks/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(updatedTaskJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(updatedTaskJson));
     }
 }
