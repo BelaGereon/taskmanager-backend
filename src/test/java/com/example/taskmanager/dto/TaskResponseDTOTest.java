@@ -21,12 +21,12 @@ public class TaskResponseDTOTest {
                         "Response DTO Description 2"
                 );
 
-        assertEquals(1, taskResponseDTO1.getId());
-        assertEquals("Response DTO Title 1", taskResponseDTO1.getTitle());
-        assertEquals("Response DTO Description 1", taskResponseDTO1.getDescription());
+        assertEquals(1, taskResponseDTO1.id());
+        assertEquals("Response DTO Title 1", taskResponseDTO1.title());
+        assertEquals("Response DTO Description 1", taskResponseDTO1.description());
 
-        assertEquals(2, taskResponseDTO2.getId());
-        assertEquals("Response DTO Title 2", taskResponseDTO2.getTitle());
-        assertEquals("Response DTO Description 2", taskResponseDTO2.getDescription());
+        assertEquals(2, taskResponseDTO2.id());
+        assertEquals("Response DTO Title 2", taskResponseDTO2.title());
+        assertEquals("Response DTO Description 2", taskResponseDTO2.description());
     }
 }

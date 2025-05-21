@@ -52,15 +52,15 @@ public class TaskService {
     public TaskResponseDTO updateTask(int id, TaskRequestDTO updatedTask) {
         Task existingTask = getTaskById(id);
 
-        existingTask.setTitle(updatedTask.getTitle());
-        existingTask.setDescription(updatedTask.getDescription());
+        existingTask.setTitle(updatedTask.title());
+        existingTask.setDescription(updatedTask.description());
 
         return createDtoFromTaskEntity(existingTask);
     }
 
     public TaskResponseDTO createTask(TaskRequestDTO requestDTO) {
         int taskId = idCounter.incrementAndGet();
-        Task createdTask = new Task(taskId, requestDTO.getTitle(), requestDTO.getDescription());
+        Task createdTask = new Task(taskId, requestDTO.title(), requestDTO.description());
         tasks.add(createdTask);
 
         return createDtoFromTaskEntity(createdTask);

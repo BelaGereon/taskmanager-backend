@@ -163,9 +163,9 @@ public class TaskServiceTests {
 
         TaskResponseDTO responseDTO = taskService.createTask(requestDTO);
 
-        assertEquals("Title", responseDTO.getTitle());
-        assertEquals("Description", responseDTO.getDescription());
-        assertEquals(1, responseDTO.getId());
+        assertEquals("Title", responseDTO.title());
+        assertEquals("Description", responseDTO.description());
+        assertEquals(1, responseDTO.id());
     }
 
     @Test
@@ -180,11 +180,11 @@ public class TaskServiceTests {
         // Then
         assertEquals(2, dtos.size());
 
-        assertEquals("Title 1", dtos.get(0).getTitle());
-        assertEquals("Description 1", dtos.get(0).getDescription());
+        assertEquals("Title 1", dtos.get(0).title());
+        assertEquals("Description 1", dtos.get(0).description());
 
-        assertEquals("Title 2", dtos.get(1).getTitle());
-        assertEquals("Description 2", dtos.get(1).getDescription());
+        assertEquals("Title 2", dtos.get(1).title());
+        assertEquals("Description 2", dtos.get(1).description());
     }
 
     @Test
@@ -195,9 +195,9 @@ public class TaskServiceTests {
 
         TaskResponseDTO responseDTO = taskService.getTaskByIdAsDto(2);
 
-        assertEquals(2, responseDTO.getId());
-        assertEquals("Title 2", responseDTO.getTitle());
-        assertEquals("Description 2", responseDTO.getDescription());
+        assertEquals(2, responseDTO.id());
+        assertEquals("Title 2", responseDTO.title());
+        assertEquals("Description 2", responseDTO.description());
     }
 
     @Test
@@ -206,8 +206,8 @@ public class TaskServiceTests {
 
         TaskResponseDTO updated = taskService.updateTask(1, new TaskRequestDTO("New Title", "New Description"));
 
-        assertEquals(1, updated.getId());
-        assertEquals("New Title", updated.getTitle());
-        assertEquals("New Description", updated.getDescription());
+        assertEquals(1, updated.id());
+        assertEquals("New Title", updated.title());
+        assertEquals("New Description", updated.description());
     }
 }
