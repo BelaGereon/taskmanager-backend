@@ -37,7 +37,7 @@ public class TaskService {
         return tasks.stream()
                 .filter(task -> task.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Task with the getId " + id + " does not exist."));
+                .orElseThrow(() -> new IllegalArgumentException("Task with an ID of " + id + " does not exist."));
     }
 
     public void deleteTask(Task task) {
