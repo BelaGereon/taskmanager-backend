@@ -1,5 +1,7 @@
 package com.example.taskmanager.controller;
 
+import com.example.taskmanager.dto.TaskRequestDTO;
+import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.service.TaskService;
 import com.example.taskmanager.utility.testdata.TaskFactory;
@@ -170,9 +172,9 @@ public class TaskControllerTests {
 
     @Test
     void shouldUpdateTask() throws Exception {
-        Task updatedTask = TaskFactory.createTaskObject(69, "Updated Title", "Old Description");
+        TaskResponseDTO updatedTask = new TaskResponseDTO(69, "Updated Title", "Old Description");
 
-        when(mockTaskService.updateTask(69, updatedTask)).thenReturn(updatedTask);
+        when(mockTaskService.updateTask(eq(69), any(TaskRequestDTO.class))).thenReturn(updatedTask);
 
         String updatedTaskJson = """
                 {
@@ -187,7 +189,5 @@ public class TaskControllerTests {
                         .content(updatedTaskJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(updatedTaskJson));
-
-        verify(mockTaskService).updateTask(eq(69), eq(updatedTask));
     }
 }

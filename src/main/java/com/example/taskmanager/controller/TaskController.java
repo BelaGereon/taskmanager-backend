@@ -1,5 +1,7 @@
 package com.example.taskmanager.controller;
 
+import com.example.taskmanager.dto.TaskRequestDTO;
+import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,7 @@ public class TaskController {
     }
 
     @PutMapping("/tasks/{id}")
-    Task updateTask(@PathVariable int id, @RequestBody Task updatedTask) {
+    TaskResponseDTO updateTask(@PathVariable int id, @RequestBody TaskRequestDTO updatedTask) {
         return taskService.updateTask(id, updatedTask);
     }
 }
