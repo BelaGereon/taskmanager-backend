@@ -65,6 +65,11 @@ public class TaskControllerIntegrationTests {
                         .content(updatedTaskJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(updatedTaskJson));
+
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+
     }
 
     @Test
