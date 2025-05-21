@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,17 +32,26 @@ public class TaskControllerTests {
 
     @BeforeEach
     public void setupMocks() {
+        TaskRequestDTO task1Request = new TaskRequestDTO( "Title 1", "Description 1");
+        TaskResponseDTO task1Response = new TaskResponseDTO(1, "Title 1", "Description 1");
+
+        TaskRequestDTO task2Request = new TaskRequestDTO("Title 2", "Description 2");
+        TaskResponseDTO task2Response = new TaskResponseDTO(2, "Title 2", "Description 2");
+
+        TaskRequestDTO task3Request = new TaskRequestDTO("Title 3", "Description 3");
+        TaskResponseDTO task3Response = new TaskResponseDTO(3, "Title 3", "Description 3");
+
         Task task1 = new Task(1, "Title 1", "Description 1");
         Task task2 = new Task(2, "Title 2", "Description 2");
         Task task3 = new Task(3, "Title 3", "Description 3");
 
         when(mockTaskService.getAllTasks()).thenReturn(List.of(task1, task2, task3));
 
-        when(mockTaskService.createTask(createTaskObject("Title 1", "Description 1"))).thenReturn(task1);
-        when(mockTaskService.createTask(createTaskObject("Title 2", "Description 2"))).thenReturn(task2);
-        when(mockTaskService.createTask(createTaskObject("Title 3", "Description 3"))).thenReturn(task3);
+        when(mockTaskService.createTask(task1Request)).thenReturn(task1Response);
+        when(mockTaskService.createTask(task2Request)).thenReturn(task2Response);
+        when(mockTaskService.createTask(task3Request)).thenReturn(task3Response);
 
-        when(mockTaskService.getTaskById(2)).thenReturn(task2);
+        when(mockTaskService.getTaskById(2)).thenReturn(createTaskObject(2, "Title 2", "Description 2"));
     }
 
     @Test
@@ -69,29 +79,6 @@ public class TaskControllerTests {
         mockMvc.perform(get("/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
-    }
-
-    @Test
-    void shouldReturnCreatedTask() throws Exception {
-        String taskToBeCreatedJson = """
-            {
-                "title": "Title 1",
-                "description": "Description 1"
-            }
-        """;
-        String createdTaskJson = """
-            {
-                "id": 1,
-                "title": "Title 1",
-                "description": "Description 1"
-            }
-        """;
-
-        mockMvc.perform(post("/tasks")
-                        .contentType("application/json")
-                        .content(taskToBeCreatedJson))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(createdTaskJson));
     }
 
     @Test
@@ -189,5 +176,34 @@ public class TaskControllerTests {
                         .content(updatedTaskJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(updatedTaskJson));
+    }
+
+    @Test
+    void givenRequestDto_whenCreatingTask_thenReturnResponseDto() throws Exception {
+        TaskRequestDTO requestDTO = new TaskRequestDTO("New Task", "Some Description");
+        TaskResponseDTO responseDTO = new TaskResponseDTO(1, "New Task", "Some Description");
+
+        when(mockTaskService.createTask(requestDTO)).thenReturn(responseDTO);
+
+        String requestJson = """
+            {
+                "title": "New Task",
+                "description": "Some Description"
+            }
+        """;
+
+        String responseJson = """
+                {
+                    "id": 1,
+                    "title": "New Task",
+                    "description": "Some Description"
+                }
+            """;
+
+        mockMvc.perform(post("/tasks")
+                        .contentType("application/json")
+                        .content(requestJson))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(responseJson));
     }
 }

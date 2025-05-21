@@ -32,7 +32,7 @@ public class TaskController {
 
     @PostMapping("/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    Task createTask(@RequestBody Task task) {
+    TaskResponseDTO createTask(@RequestBody TaskRequestDTO task) {
         return taskService.createTask(task);
     }
 
