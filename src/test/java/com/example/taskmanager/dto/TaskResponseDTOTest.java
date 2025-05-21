@@ -22,8 +22,8 @@ public class TaskResponseDTOTest {
                 );
 
         assertEquals(1, taskResponseDTO1.getId());
-        assertEquals(1, taskResponseDTO1.getId());
-        assertEquals(1, taskResponseDTO1.getId());
+        assertEquals("Response DTO Title 1", taskResponseDTO1.getTitle());
+        assertEquals("Response DTO Description 2", taskResponseDTO1.getDescription());
 
         assertEquals(2, taskResponseDTO2.getId());
         assertEquals("Response DTO Title 2", taskResponseDTO2.getTitle());
