@@ -1,5 +1,7 @@
 package com.example.taskmanager.service;
 
+import com.example.taskmanager.dto.TaskRequestDTO;
+import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
 import org.junit.jupiter.api.Test;
 
@@ -153,5 +155,16 @@ public class TaskServiceTests {
         assertEquals("New Description", taskToBeUpdated.getDescription());
         assertEquals("Original Description", irrelevantTask.getDescription());
         assertEquals(2, taskService.getAllTasks().size());
+    }
+
+    @Test
+    void givenRequestDto_whenCreatingTask_thenReturnResponseDto() {
+        TaskRequestDTO requestDTO = new TaskRequestDTO("Title", "Description");
+
+        TaskResponseDTO responseDTO = taskService.createTask(requestDTO);
+
+        assertEquals("Title", responseDTO.getTitle());
+        assertEquals("Description", responseDTO.getDescription());
+        assertEquals(1, responseDTO.getId());
     }
 }

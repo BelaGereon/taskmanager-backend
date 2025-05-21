@@ -1,5 +1,7 @@
 package com.example.taskmanager.service;
 
+import com.example.taskmanager.dto.TaskRequestDTO;
+import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ public class TaskService {
 
     private final AtomicInteger idCounter = new AtomicInteger(0);
     private final List<Task> tasks = new ArrayList<>();
+    private final List<TaskResponseDTO> taskResponseDTOS = new ArrayList<>();
 
     public List<Task> getAllTasks() {
         return List.copyOf(tasks);
@@ -60,5 +63,13 @@ public class TaskService {
         existingTask.setDescription(updatedTask.getDescription());
 
         return existingTask;
+    }
+
+    public TaskResponseDTO createTask(TaskRequestDTO requestDTO) {
+        int taskId = idCounter.incrementAndGet();
+        TaskResponseDTO createdTask = new TaskResponseDTO(taskId, requestDTO.getTitle(), requestDTO.getDescription());
+        taskResponseDTOS.add(createdTask);
+
+        return createdTask;
     }
 }
