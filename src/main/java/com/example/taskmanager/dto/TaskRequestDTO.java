@@ -1,5 +1,8 @@
 package com.example.taskmanager.dto;
 
+import lombok.Getter;
+
+@Getter
 public class TaskRequestDTO {
     private final String title;
     private final String description;
@@ -9,11 +12,4 @@ public class TaskRequestDTO {
         this.description = description;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }
