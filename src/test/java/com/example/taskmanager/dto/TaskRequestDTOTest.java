@@ -14,6 +14,8 @@ public class TaskRequestDTOTest {
 
         assertEquals("DTO Title", taskRequestDTO1.getTitle());
         assertEquals("DTO Description", taskRequestDTO1.getDescription());
+
         assertEquals("Different DTO Title", taskRequestDTO2.getTitle());
+        assertEquals("Different DTO Description", taskRequestDTO2.getDescription());
     }
 }
