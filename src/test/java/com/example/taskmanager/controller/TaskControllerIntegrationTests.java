@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,16 +44,9 @@ public class TaskControllerIntegrationTests {
 
     @Test
     void shouldReturnListOfAllCreatedTasks() throws Exception {
-        Task task1 = new Task(1, "Integration Title 1", "Integration Description 1");
-        sendPostRequestWithTaskObject(task1);
+        List<Task> listOfCreatedTasks = setupTasks();
+        String taskListJson = objectMapper.writeValueAsString(listOfCreatedTasks);
 
-        Task task2 = new Task(2, "Integration Title 2", "Integration Description 2");
-        sendPostRequestWithTaskObject(task2);
-
-        Task task3 = new Task(3, "Integration Title 3", "Integration Description 3");
-        sendPostRequestWithTaskObject(task3);
-
-        String taskListJson = objectMapper.writeValueAsString(List.of(task1, task2, task3));
         mockMvc.perform(get("/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(taskListJson));
@@ -71,6 +65,33 @@ public class TaskControllerIntegrationTests {
                         .content(updatedTaskJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(updatedTaskJson));
+    }
+
+    @Test
+    void shouldDeleteTask() throws Exception {
+        List<Task> listOfCreatedTasks = setupTasks();
+
+        assertEquals(3, listOfCreatedTasks.size());
+
+        mockMvc.perform(delete("/tasks/2"))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    private List<Task> setupTasks() throws Exception {
+        Task task1 = new Task(1, "Integration Title 1", "Integration Description 1");
+        sendPostRequestWithTaskObject(task1);
+
+        Task task2 = new Task(2, "Integration Title 2", "Integration Description 2");
+        sendPostRequestWithTaskObject(task2);
+
+        Task task3 = new Task(3, "Integration Title 3", "Integration Description 3");
+        sendPostRequestWithTaskObject(task3);
+
+        return List.of(task1, task2, task3);
     }
 
     private void sendPostRequestWithTaskObject(Task task) throws Exception {
