@@ -49,13 +49,13 @@ public class TaskService {
         resetTasksList();
     }
 
-    public Task updateTask(int id, Task updatedTask) {
+    public TaskResponseDTO updateTask(int id, TaskRequestDTO updatedTask) {
         Task existingTask = getTaskById(id);
 
         existingTask.setTitle(updatedTask.getTitle());
         existingTask.setDescription(updatedTask.getDescription());
 
-        return existingTask;
+        return createDtoFromTaskEntity(existingTask);
     }
 
     public TaskResponseDTO createTask(TaskRequestDTO requestDTO) {

@@ -134,7 +134,7 @@ public class TaskServiceTests {
     void shouldUpdateTask() {
         Task taskToBeUpdated = taskService.createTask(createTaskObject(1, "Old Title", "Old Description"));
 
-        taskService.updateTask(1, createTaskObject("New Title", "Old Description"));
+        taskService.updateTask(1, new TaskRequestDTO("New Title", "Old Description"));
 
         assertEquals(1, taskToBeUpdated.getId());
         assertEquals("New Title", taskToBeUpdated.getTitle());
@@ -150,7 +150,7 @@ public class TaskServiceTests {
 
         assertEquals(2, taskService.getAllTasks().size());
 
-        taskService.updateTask(2, createTaskObject("Correct Task", "New Description"));
+        taskService.updateTask(2, new TaskRequestDTO("Correct Task", "New Description"));
 
         assertEquals("New Description", taskToBeUpdated.getDescription());
         assertEquals("Original Description", irrelevantTask.getDescription());
@@ -198,5 +198,16 @@ public class TaskServiceTests {
         assertEquals(2, responseDTO.getId());
         assertEquals("Title 2", responseDTO.getTitle());
         assertEquals("Description 2", responseDTO.getDescription());
+    }
+
+    @Test
+    void givenRequestDto_whenUpdatingTask_thenReturnUpdatedResponseDto() {
+        taskService.createTask(new TaskRequestDTO("Old Title", "Old Description"));
+
+        TaskResponseDTO updated = taskService.updateTask(1, new TaskRequestDTO("New Title", "New Description"));
+
+        assertEquals(1, updated.getId());
+        assertEquals("New Title", updated.getTitle());
+        assertEquals("New Description", updated.getDescription());
     }
 }
