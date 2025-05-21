@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TaskRequestDTOTest {
 
     @Test
-    void shouldCreateTaskRequestDTOWithTheCorrectTitle() {
+    void givenTitle_whenConstructingRequestDTO_thenTitleIsCorrect() {
         TaskRequestDTO taskRequestDTO1 = new TaskRequestDTO("DTO Title");
         TaskRequestDTO taskRequestDTO2 = new TaskRequestDTO("Different DTO Title");
 
