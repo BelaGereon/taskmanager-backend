@@ -58,6 +58,21 @@ public class TaskControllerIntegrationTests {
                 .andExpect(content().json(taskListJson));
     }
 
+    @Test
+    void shouldUpdateTask() throws Exception {
+        Task taskToBeUpdated = new Task(1, "Original Title", "Original Description");
+        sendPostRequestWithTaskObject(taskToBeUpdated);
+
+        Task updatedTask = new Task(1, "Updated Title", "Updated Description");
+        String updatedTaskJson = createJsonFromTask(updatedTask);
+
+        mockMvc.perform(put("/tasks/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedTaskJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(updatedTaskJson));
+    }
+
     private void sendPostRequestWithTaskObject(Task task) throws Exception {
         String taskJson = createJsonFromTask(task);
 
@@ -72,20 +87,5 @@ public class TaskControllerIntegrationTests {
 
     private String createJsonFromTask(Task task) throws JsonProcessingException {
         return objectMapper.writeValueAsString(task);
-    }
-
-    @Test
-    void shouldUpdateTask() throws Exception {
-        Task taskToBeUpdated = new Task(1, "Original Title", "Original Description");
-        sendPostRequestWithTaskObject(taskToBeUpdated);
-
-        Task updatedTask = new Task(1, "Updated Title", "Updated Description");
-        String updatedTaskJson = createJsonFromTask(updatedTask);
-
-        mockMvc.perform(put("/tasks/1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(updatedTaskJson))
-                .andExpect(status().isOk())
-                .andExpect(content().json(updatedTaskJson));
     }
 }
