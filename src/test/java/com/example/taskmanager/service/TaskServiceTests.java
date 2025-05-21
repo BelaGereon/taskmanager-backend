@@ -195,6 +195,7 @@ public class TaskServiceTests {
 
         TaskResponseDTO responseDTO = taskService.getTaskByIdAsDto(2);
 
+        assertEquals(2, responseDTO.getId());
         assertEquals("Title 2", responseDTO.getTitle());
         assertEquals("Description 2", responseDTO.getDescription());
     }
