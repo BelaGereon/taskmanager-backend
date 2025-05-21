@@ -49,18 +49,6 @@ public class TaskService {
         resetTasksList();
     }
 
-    public AtomicInteger getIdCounterForTest() {
-        return idCounter;
-    }
-
-    private void resetTasksList() {
-        tasks.clear();
-    }
-
-    private void resetIdCounter() {
-        idCounter.set(0);
-    }
-
     public Task updateTask(int id, Task updatedTask) {
         Task existingTask = getTaskById(id);
 
@@ -81,6 +69,18 @@ public class TaskService {
     public TaskResponseDTO getTaskByIdAsDto(int id) {
         Task task = getTaskById(id);
         return createDtoFromTaskEntity(task);
+    }
+
+    public AtomicInteger getIdCounterForTest() {
+        return idCounter;
+    }
+
+    private void resetTasksList() {
+        tasks.clear();
+    }
+
+    private void resetIdCounter() {
+        idCounter.set(0);
     }
 
     private static TaskResponseDTO createDtoFromTaskEntity(Task task) {
