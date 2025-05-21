@@ -82,4 +82,9 @@ public class TaskService {
 
         return new TaskResponseDTO(createdTask.getId(), createdTask.getTitle(), createdTask.getDescription());
     }
+
+    public TaskResponseDTO getTaskByIdAsDto(int id) {
+        Task task = getTaskById(id);
+        return new TaskResponseDTO(task.getId(), task.getTitle(), task.getDescription());
+    }
 }
