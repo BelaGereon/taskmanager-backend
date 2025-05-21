@@ -1,7 +1,6 @@
 package com.example.taskmanager.service;
 
 import com.example.taskmanager.model.Task;
-import com.example.taskmanager.utility.testdata.TaskFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
