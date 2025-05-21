@@ -8,8 +8,10 @@ public class TaskRequestDTOTest {
 
     @Test
     void shouldCreateTaskRequestDTOWithTheCorrectTitle() {
-        TaskRequestDTO taskRequestDTO = new TaskRequestDTO();
+        TaskRequestDTO taskRequestDTO1 = new TaskRequestDTO();
+        TaskRequestDTO taskRequestDTO2 = new TaskRequestDTO();
 
-        assertEquals("DTO Title", taskRequestDTO.getTitle());
+        assertEquals("DTO Title", taskRequestDTO1.getTitle());
+        assertEquals("Different  DTO Title", taskRequestDTO2.getTitle());
     }
 }
