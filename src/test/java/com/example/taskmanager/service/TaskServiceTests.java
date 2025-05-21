@@ -167,4 +167,23 @@ public class TaskServiceTests {
         assertEquals("Description", responseDTO.getDescription());
         assertEquals(1, responseDTO.getId());
     }
+
+    @Test
+    void givenTasksExist_whenGettingAllTasksAsDTOs_thenReturnCorrectResponseDTOs() {
+        // Given
+        taskService.createTask(new TaskRequestDTO("Title 1", "Description 1"));
+        taskService.createTask(new TaskRequestDTO("Title 2", "Description 2"));
+
+        // When
+        List<TaskResponseDTO> dtos = taskService.getAllTasksAsDTOs();
+
+        // Then
+        assertEquals(2, dtos.size());
+
+        assertEquals("Title 1", dtos.get(0).getTitle());
+        assertEquals("Description 1", dtos.get(0).getDescription());
+
+        assertEquals("Title 2", dtos.get(1).getTitle());
+        assertEquals("Description 2", dtos.get(1).getDescription());
+    }
 }

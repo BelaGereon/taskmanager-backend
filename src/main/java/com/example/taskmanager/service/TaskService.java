@@ -8,16 +8,26 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 @Service
 public class TaskService {
 
     private final AtomicInteger idCounter = new AtomicInteger(0);
     private final List<Task> tasks = new ArrayList<>();
-    private final List<TaskResponseDTO> taskResponseDTOS = new ArrayList<>();
 
     public List<Task> getAllTasks() {
         return List.copyOf(tasks);
+    }
+
+    public List<TaskResponseDTO> getAllTasksAsDTOs() {
+        return tasks.stream()
+                .map(convertTaskToResponseDto())
+                .toList();
+    }
+
+    private static Function<Task, TaskResponseDTO> convertTaskToResponseDto() {
+        return task -> new TaskResponseDTO(task.getId(), task.getTitle(), task.getDescription());
     }
 
     public Task createTask(Task task) {
@@ -67,9 +77,9 @@ public class TaskService {
 
     public TaskResponseDTO createTask(TaskRequestDTO requestDTO) {
         int taskId = idCounter.incrementAndGet();
-        TaskResponseDTO createdTask = new TaskResponseDTO(taskId, requestDTO.getTitle(), requestDTO.getDescription());
-        taskResponseDTOS.add(createdTask);
+        Task createdTask = new Task(taskId, requestDTO.getTitle(), requestDTO.getDescription());
+        tasks.add(createdTask);
 
-        return createdTask;
+        return new TaskResponseDTO(createdTask.getId(), createdTask.getTitle(), createdTask.getDescription());
     }
 }
