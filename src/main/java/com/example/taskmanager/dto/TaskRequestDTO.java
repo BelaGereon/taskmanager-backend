@@ -1,4 +1,4 @@
-package com.example.taskmanager.model;
+package com.example.taskmanager.dto;
 
 public class TaskRequestDTO {
     private final String title;
