@@ -112,10 +112,19 @@ public class TaskControllerTests {
     }
 
     @Test
-    void shouldReturnCorrectTaskById() throws Exception {
-        when(mockTaskService.getTaskByIdAsDto(2)).thenReturn(TASK_RESPONSE_DTO_2);
+    void givenRequestWithId_whenGettingTaskById_thenReturnCorrectTaskById() throws Exception {
+        mockGetTaskByIdAsDto(1,TASK_RESPONSE_DTO_1);
+        mockGetTaskByIdAsDto(2,TASK_RESPONSE_DTO_2);
 
-        String expectedTaskJson = """
+        String expectedTask1Json = """
+            {
+                "id": 1,
+                "title": "Title 1",
+                "description": "Description 1"
+            }
+        """;
+
+        String expectedTask2Json = """
             {
                 "id": 2,
                 "title": "Title 2",
@@ -123,9 +132,15 @@ public class TaskControllerTests {
             }
         """;
 
+        mockMvc.perform(get("/tasks/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedTask1Json));
+
+        verify(mockTaskService).getTaskByIdAsDto(1);
+
         mockMvc.perform(get("/tasks/2"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedTaskJson));
+                .andExpect(content().json(expectedTask2Json));
 
         verify(mockTaskService).getTaskByIdAsDto(2);
     }
@@ -200,5 +215,9 @@ public class TaskControllerTests {
 
     private void mockCreateTask(TaskRequestDTO requestDto, TaskResponseDTO responseDTO) {
         when(mockTaskService.createTask(requestDto)).thenReturn(responseDTO);
+    }
+
+    private void mockGetTaskByIdAsDto(int id, TaskResponseDTO responseDTO) {
+        when(mockTaskService.getTaskByIdAsDto(id)).thenReturn(responseDTO);
     }
 }
