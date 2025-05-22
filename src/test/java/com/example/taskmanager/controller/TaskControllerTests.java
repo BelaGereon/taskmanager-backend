@@ -68,80 +68,32 @@ public class TaskControllerTests {
         mockCreateTask(TASK_REQUEST_DTO_1, TASK_RESPONSE_DTO_1);
         mockCreateTask(TASK_REQUEST_DTO_2, TASK_RESPONSE_DTO_2);
 
-        String task1Json = """
-            {
-                "title": "Title 1",
-                "description": "Description 1"
-            }
-        """;
-
-        String task2Json = """
-            {
-                "title": "Title 2",
-                "description": "Description 2"
-            }
-        """;
-
-        String expectedTask1Json = """
-            {
-                "id": 1,
-                "title": "Title 1",
-                "description": "Description 1"
-            }
-        """;
-
-        String expectedTask2Json = """
-            {
-                "id": 2,
-                "title": "Title 2",
-                "description": "Description 2"
-            }
-        """;
+        mockMvc.perform(post("/tasks")
+                        .contentType("application/json")
+                        .content(TASK_REQUEST_DTO_1.toJson()))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(TASK_RESPONSE_DTO_1.toJson()));
 
         mockMvc.perform(post("/tasks")
                         .contentType("application/json")
-                        .content(task1Json))
+                        .content(TASK_REQUEST_DTO_2.toJson()))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(expectedTask1Json));
-
-        mockMvc.perform(post("/tasks")
-                        .contentType("application/json")
-                        .content(task2Json))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(expectedTask2Json));
+                .andExpect(content().json(TASK_RESPONSE_DTO_2.toJson()));
     }
 
     @Test
     void givenRequestWithId_whenGettingTaskById_thenReturnCorrectTaskById() throws Exception {
-        mockGetTaskByIdAsDto(1,TASK_RESPONSE_DTO_1);
-        mockGetTaskByIdAsDto(2,TASK_RESPONSE_DTO_2);
-
-        String expectedTask1Json = """
-            {
-                "id": 1,
-                "title": "Title 1",
-                "description": "Description 1"
-            }
-        """;
-
-        String expectedTask2Json = """
-            {
-                "id": 2,
-                "title": "Title 2",
-                "description": "Description 2"
-            }
-        """;
+        mockGetTaskByIdAsDto(1, TASK_RESPONSE_DTO_1);
+        mockGetTaskByIdAsDto(2, TASK_RESPONSE_DTO_2);
 
         mockMvc.perform(get("/tasks/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedTask1Json));
-
+                .andExpect(content().json(TASK_RESPONSE_DTO_1.toJson()));
         verify(mockTaskService).getTaskByIdAsDto(1);
 
         mockMvc.perform(get("/tasks/2"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedTask2Json));
-
+                .andExpect(content().json(TASK_RESPONSE_DTO_2.toJson()));
         verify(mockTaskService).getTaskByIdAsDto(2);
     }
 
@@ -165,19 +117,11 @@ public class TaskControllerTests {
 
         when(mockTaskService.updateTask(eq(69), any(TaskRequestDTO.class))).thenReturn(updatedTask);
 
-        String updatedTaskJson = """
-                {
-                    "id": 69,
-                    "title": "Updated Title",
-                    "description": "Old Description"
-                }
-            """;
-
         mockMvc.perform(put("/tasks/69")
                         .contentType("application/json")
-                        .content(updatedTaskJson))
+                        .content(updatedTask.toJson()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(updatedTaskJson));
+                .andExpect(content().json(updatedTask.toJson()));
     }
 
     @Test
@@ -187,26 +131,11 @@ public class TaskControllerTests {
 
         mockCreateTask(requestDTO, responseDTO);
 
-        String requestJson = """
-            {
-                "title": "New Task",
-                "description": "Some Description"
-            }
-        """;
-
-        String responseJson = """
-                {
-                    "id": 1,
-                    "title": "New Task",
-                    "description": "Some Description"
-                }
-            """;
-
         mockMvc.perform(post("/tasks")
                         .contentType("application/json")
-                        .content(requestJson))
+                        .content(requestDTO.toJson()))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(responseJson));
+                .andExpect(content().json(responseDTO.toJson()));
     }
 
     private void mockGetAllTasksAsDtos() {
