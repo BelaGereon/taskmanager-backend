@@ -1,7 +1,8 @@
 package com.example.taskmanager.service;
 
+import com.example.taskmanager.dto.TaskRequestDTO;
+import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
-import com.example.taskmanager.utility.testdata.TaskFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -133,7 +134,7 @@ public class TaskServiceTests {
     void shouldUpdateTask() {
         Task taskToBeUpdated = taskService.createTask(createTaskObject(1, "Old Title", "Old Description"));
 
-        taskService.updateTask(1, createTaskObject("New Title", "Old Description"));
+        taskService.updateTask(1, new TaskRequestDTO("New Title", "Old Description"));
 
         assertEquals(1, taskToBeUpdated.getId());
         assertEquals("New Title", taskToBeUpdated.getTitle());
@@ -149,10 +150,64 @@ public class TaskServiceTests {
 
         assertEquals(2, taskService.getAllTasks().size());
 
-        taskService.updateTask(2, createTaskObject("Correct Task", "New Description"));
+        taskService.updateTask(2, new TaskRequestDTO("Correct Task", "New Description"));
 
         assertEquals("New Description", taskToBeUpdated.getDescription());
         assertEquals("Original Description", irrelevantTask.getDescription());
         assertEquals(2, taskService.getAllTasks().size());
+    }
+
+    @Test
+    void givenRequestDto_whenCreatingTask_thenReturnResponseDto() {
+        TaskRequestDTO requestDTO = new TaskRequestDTO("Title", "Description");
+
+        TaskResponseDTO responseDTO = taskService.createTask(requestDTO);
+
+        assertEquals("Title", responseDTO.title());
+        assertEquals("Description", responseDTO.description());
+        assertEquals(1, responseDTO.id());
+    }
+
+    @Test
+    void givenTasksExist_whenGettingAllTasksAsDTOs_thenReturnCorrectResponseDTOs() {
+        // Given
+        taskService.createTask(new TaskRequestDTO("Title 1", "Description 1"));
+        taskService.createTask(new TaskRequestDTO("Title 2", "Description 2"));
+
+        // When
+        List<TaskResponseDTO> dtos = taskService.getAllTasksAsDTOs();
+
+        // Then
+        assertEquals(2, dtos.size());
+
+        assertEquals("Title 1", dtos.get(0).title());
+        assertEquals("Description 1", dtos.get(0).description());
+
+        assertEquals("Title 2", dtos.get(1).title());
+        assertEquals("Description 2", dtos.get(1).description());
+    }
+
+    @Test
+    void givenTaskExist_whenGettingTaskResponseDtoById_ThenReturnCorrectResponseDto() {
+        taskService.createTask(new TaskRequestDTO("Title 1", "Description 1"));
+        taskService.createTask(new TaskRequestDTO("Title 2", "Description 2"));
+        taskService.createTask(new TaskRequestDTO("Title 3", "Description 3"));
+
+        TaskResponseDTO responseDTO = taskService.getTaskByIdAsDto(2);
+
+        assertEquals(2, responseDTO.id());
+        assertEquals("Title 2", responseDTO.title());
+        assertEquals("Description 2", responseDTO.description());
+    }
+
+    @Test
+    void givenRequestDto_whenUpdatingTask_thenReturnUpdatedResponseDto() {
+        taskService.createTask(new TaskRequestDTO("Old Title", "Old Description"));
+
+        TaskResponseDTO updated = taskService.updateTask(1, new TaskRequestDTO("New Title", "New Description"));
+
+        assertEquals(1, updated.id());
+        assertEquals("New Title", updated.title());
+        assertEquals("New Description", updated.description());
     }
 }
