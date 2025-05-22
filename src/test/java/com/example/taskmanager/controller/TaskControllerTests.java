@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.example.taskmanager.utility.JsonUtils.toJson;
 import static com.example.taskmanager.utility.testdata.TaskFactory.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -26,6 +27,7 @@ public class TaskControllerTests {
     public static final TaskResponseDTO TASK_RESPONSE_DTO_1 = createTaskResponseDto(1, "Title 1", "Description 1");
     public static final TaskResponseDTO TASK_RESPONSE_DTO_2 = createTaskResponseDto(2, "Title 2", "Description 2");
     public static final TaskResponseDTO TASK_RESPONSE_DTO_3 = createTaskResponseDto(3, "Title 3", "Description 3");
+    public static final List<TaskResponseDTO> TASK_RESPONSE_DTO_LIST = List.of(TASK_RESPONSE_DTO_1, TASK_RESPONSE_DTO_2, TASK_RESPONSE_DTO_3);
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,25 +40,7 @@ public class TaskControllerTests {
     void shouldReturnAllTasks() throws Exception {
         mockGetAllTasksAsDtos();
 
-        String expectedJson = """
-            [
-                {
-                    "id": 1,
-                    "title": "Title 1",
-                    "description": "Description 1"
-                },
-                {
-                    "id": 2,
-                    "title": "Title 2",
-                    "description": "Description 2"
-                },
-                {
-                    "id": 3,
-                    "title": "Title 3",
-                    "description": "Description 3"
-                }
-            ]
-        """;
+        String expectedJson = toJson(TASK_RESPONSE_DTO_LIST);
 
         mockMvc.perform(get("/tasks"))
                 .andExpect(status().isOk())
@@ -70,15 +54,15 @@ public class TaskControllerTests {
 
         mockMvc.perform(post("/tasks")
                         .contentType("application/json")
-                        .content(TASK_REQUEST_DTO_1.toJson()))
+                        .content(toJson(TASK_REQUEST_DTO_1)))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(TASK_RESPONSE_DTO_1.toJson()));
+                .andExpect(content().json(toJson(TASK_RESPONSE_DTO_1)));
 
         mockMvc.perform(post("/tasks")
                         .contentType("application/json")
-                        .content(TASK_REQUEST_DTO_2.toJson()))
+                        .content(toJson(TASK_REQUEST_DTO_2)))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(TASK_RESPONSE_DTO_2.toJson()));
+                .andExpect(content().json(toJson(TASK_RESPONSE_DTO_2)));
     }
 
     @Test
@@ -88,12 +72,12 @@ public class TaskControllerTests {
 
         mockMvc.perform(get("/tasks/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(TASK_RESPONSE_DTO_1.toJson()));
+                .andExpect(content().json(toJson(TASK_RESPONSE_DTO_1)));
         verify(mockTaskService).getTaskByIdAsDto(1);
 
         mockMvc.perform(get("/tasks/2"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(TASK_RESPONSE_DTO_2.toJson()));
+                .andExpect(content().json(toJson(TASK_RESPONSE_DTO_2)));
         verify(mockTaskService).getTaskByIdAsDto(2);
     }
 
@@ -119,9 +103,9 @@ public class TaskControllerTests {
 
         mockMvc.perform(put("/tasks/69")
                         .contentType("application/json")
-                        .content(updatedTask.toJson()))
+                        .content(toJson(updatedTask)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(updatedTask.toJson()));
+                .andExpect(content().json(toJson(updatedTask)));
     }
 
     @Test
@@ -133,13 +117,13 @@ public class TaskControllerTests {
 
         mockMvc.perform(post("/tasks")
                         .contentType("application/json")
-                        .content(requestDTO.toJson()))
+                        .content(toJson(requestDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(responseDTO.toJson()));
+                .andExpect(content().json(toJson(responseDTO)));
     }
 
     private void mockGetAllTasksAsDtos() {
-        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(List.of(TASK_RESPONSE_DTO_1, TASK_RESPONSE_DTO_2, TASK_RESPONSE_DTO_3));
+        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(TASK_RESPONSE_DTO_LIST);
     }
 
     private void mockCreateTask(TaskRequestDTO requestDto, TaskResponseDTO responseDTO) {
