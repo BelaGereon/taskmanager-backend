@@ -51,7 +51,9 @@ public class TaskControllerTests {
         when(mockTaskService.createTask(task2Request)).thenReturn(task2Response);
         when(mockTaskService.createTask(task3Request)).thenReturn(task3Response);
 
-        when(mockTaskService.getTaskById(2)).thenReturn(createTaskObject(2, "Title 2", "Description 2"));
+        when(mockTaskService.getTaskById(2)).thenReturn(task2);
+        when(mockTaskService.getTaskByIdAsDto(2)).thenReturn(task2Response);
+
     }
 
     @Test
@@ -140,7 +142,7 @@ public class TaskControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedTaskJson));
 
-        verify(mockTaskService).getTaskById(2);
+        verify(mockTaskService).getTaskByIdAsDto(2);
     }
 
     @Test
