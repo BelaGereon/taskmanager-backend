@@ -4,7 +4,6 @@ import com.example.taskmanager.dto.TaskRequestDTO;
 import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.service.TaskService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
