@@ -4,18 +4,16 @@ import com.example.taskmanager.dto.TaskRequestDTO;
 import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.service.TaskService;
-import com.example.taskmanager.utility.testdata.TaskFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.example.taskmanager.utility.testdata.TaskFactory.createTaskObject;
+import static com.example.taskmanager.utility.testdata.TaskFactory.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,18 +30,18 @@ public class TaskControllerTests {
 
     @BeforeEach
     public void setupMocks() {
-        TaskRequestDTO task1Request = new TaskRequestDTO( "Title 1", "Description 1");
-        TaskResponseDTO task1Response = new TaskResponseDTO(1, "Title 1", "Description 1");
+        TaskRequestDTO task1Request = createTaskRequestDto("Title 1", "Description 1");
+        TaskResponseDTO task1Response = createTaskResponseDto(1, "Title 1", "Description 1");
 
-        TaskRequestDTO task2Request = new TaskRequestDTO("Title 2", "Description 2");
-        TaskResponseDTO task2Response = new TaskResponseDTO(2, "Title 2", "Description 2");
+        TaskRequestDTO task2Request = createTaskRequestDto("Title 2", "Description 2");
+        TaskResponseDTO task2Response = createTaskResponseDto(2, "Title 2", "Description 2");
 
-        TaskRequestDTO task3Request = new TaskRequestDTO("Title 3", "Description 3");
-        TaskResponseDTO task3Response = new TaskResponseDTO(3, "Title 3", "Description 3");
+        TaskRequestDTO task3Request = createTaskRequestDto("Title 3", "Description 3");
+        TaskResponseDTO task3Response = createTaskResponseDto(3, "Title 3", "Description 3");
 
-        Task task1 = new Task(1, "Title 1", "Description 1");
-        Task task2 = new Task(2, "Title 2", "Description 2");
-        Task task3 = new Task(3, "Title 3", "Description 3");
+        Task task1 = createTaskObject(1, "Title 1", "Description 1");
+        Task task2 = createTaskObject(2, "Title 2", "Description 2");
+        Task task3 = createTaskObject(3, "Title 3", "Description 3");
 
         when(mockTaskService.getAllTasks()).thenReturn(List.of(task1, task2, task3));
 
@@ -148,7 +146,7 @@ public class TaskControllerTests {
 
     @Test
     void shouldDeleteTask() throws Exception {
-        Task taskToBeDeleted = TaskFactory.createTaskObject(42, "Task", "To delete");
+        Task taskToBeDeleted =createTaskObject(42, "Task", "To delete");
 
         when(mockTaskService.getTaskById(42)).thenReturn(taskToBeDeleted);
         doNothing().when(mockTaskService).deleteTask(taskToBeDeleted);
@@ -162,7 +160,7 @@ public class TaskControllerTests {
 
     @Test
     void shouldUpdateTask() throws Exception {
-        TaskResponseDTO updatedTask = new TaskResponseDTO(69, "Updated Title", "Old Description");
+        TaskResponseDTO updatedTask = createTaskResponseDto(69, "Updated Title", "Old Description");
 
         when(mockTaskService.updateTask(eq(69), any(TaskRequestDTO.class))).thenReturn(updatedTask);
 
@@ -183,8 +181,8 @@ public class TaskControllerTests {
 
     @Test
     void givenRequestDto_whenCreatingTask_thenReturnResponseDto() throws Exception {
-        TaskRequestDTO requestDTO = new TaskRequestDTO("New Task", "Some Description");
-        TaskResponseDTO responseDTO = new TaskResponseDTO(1, "New Task", "Some Description");
+        TaskRequestDTO requestDTO = createTaskRequestDto("New Task", "Some Description");
+        TaskResponseDTO responseDTO = createTaskResponseDto(1, "New Task", "Some Description");
 
         when(mockTaskService.createTask(requestDTO)).thenReturn(responseDTO);
 
