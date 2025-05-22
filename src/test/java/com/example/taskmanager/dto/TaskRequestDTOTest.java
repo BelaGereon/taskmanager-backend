@@ -28,4 +28,28 @@ public class TaskRequestDTOTest {
 
         assertEquals(expectedJson, requestDTO.toJson());
     }
+
+    @Test
+    void givenTitleAndDescription_whenConvertingToJson_thenReturnCorrectValuesInJsonString() throws JsonProcessingException {
+        String firstTitle = "First Title";
+        String firstDescr = "First Description";
+        String secondTitle = "Second Title";
+        String secondDescr = "Second Description";
+
+        TaskRequestDTO firstRequestDTO = new TaskRequestDTO(firstTitle, firstDescr);
+        TaskRequestDTO secondRequestDTO = new TaskRequestDTO(secondTitle, secondDescr);
+
+        String expectedJsonFirstRequest = "{" +
+                "\"title\":\"" + firstTitle +
+                "\",\"description\":\"" + firstDescr + "\"" +
+                "}";
+
+        String expectedJsonSecondRequest = "{" +
+                "\"title\":\"" + secondTitle +
+                "\",\"description\":\"" + secondDescr + "\"" +
+                "}";
+
+        assertEquals(expectedJsonFirstRequest, firstRequestDTO.toJson());
+        assertEquals(expectedJsonSecondRequest, secondRequestDTO.toJson());
+    }
 }
