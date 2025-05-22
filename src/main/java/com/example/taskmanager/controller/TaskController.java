@@ -21,8 +21,8 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    List<TaskResponseDTO> getAllTasks() {
+        return taskService.getAllTasksAsDTOs();
     }
 
     @GetMapping("/tasks/{id}")

@@ -53,6 +53,7 @@ public class TaskControllerTests {
 
         when(mockTaskService.getTaskById(2)).thenReturn(task2);
         when(mockTaskService.getTaskByIdAsDto(2)).thenReturn(task2Response);
+        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(List.of(task1Response, task2Response, task3Response));
 
     }
 
