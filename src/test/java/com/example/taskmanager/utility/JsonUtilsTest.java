@@ -38,9 +38,7 @@ class JsonUtilsTest {
     void givenNotSerializableObject_whenConvertingToJson_thenThrowRuntimeException() {
         NotSerializable notSerializable = new NotSerializable();
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            toJson(notSerializable);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () -> toJson(notSerializable));
 
         assertTrue(exception.getMessage().contains("Failed to convert object to JSON"));
     }
