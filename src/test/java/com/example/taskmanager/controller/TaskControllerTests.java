@@ -33,6 +33,7 @@ public class TaskControllerTests {
     private MockMvc mockMvc;
 
     @MockitoBean
+    @Autowired
     private TaskService mockTaskService;
 
     private void mockCreateTask(TaskRequestDTO requestDto, TaskResponseDTO responseDTO) {
