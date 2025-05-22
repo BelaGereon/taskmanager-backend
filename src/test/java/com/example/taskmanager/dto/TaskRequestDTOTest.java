@@ -1,5 +1,6 @@
 package com.example.taskmanager.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,5 +18,14 @@ public class TaskRequestDTOTest {
 
         assertEquals("Different DTO Title", taskRequestDTO2.title());
         assertEquals("Different DTO Description", taskRequestDTO2.description());
+    }
+
+    @Test
+    void givenTitleAndDescription_whenConvertingToJson_thenReturnValidJsonString() throws JsonProcessingException {
+        TaskRequestDTO requestDTO = new TaskRequestDTO("Title", "Description");
+
+        String expectedJson = "{\"title\":\"Title\",\"description\":\"Description\"}";
+
+        assertEquals(expectedJson, requestDTO.toJson());
     }
 }
