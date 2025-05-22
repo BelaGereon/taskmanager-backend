@@ -34,13 +34,9 @@ public class TaskControllerTests {
     @Autowired
     private TaskService mockTaskService;
 
-    private void mockCreateTask(TaskRequestDTO requestDto, TaskResponseDTO responseDTO) {
-        when(mockTaskService.createTask(requestDto)).thenReturn(responseDTO);
-    }
-
     @Test
     void shouldReturnAllTasks() throws Exception {
-        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(List.of(TASK_RESPONSE_DTO_1, TASK_RESPONSE_DTO_2, TASK_RESPONSE_DTO_3));
+        mockGetAllTasksAsDtos();
 
         String expectedJson = """
             [
@@ -196,5 +192,13 @@ public class TaskControllerTests {
                         .content(requestJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(responseJson));
+    }
+
+    private void mockGetAllTasksAsDtos() {
+        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(List.of(TASK_RESPONSE_DTO_1, TASK_RESPONSE_DTO_2, TASK_RESPONSE_DTO_3));
+    }
+
+    private void mockCreateTask(TaskRequestDTO requestDto, TaskResponseDTO responseDTO) {
+        when(mockTaskService.createTask(requestDto)).thenReturn(responseDTO);
     }
 }
