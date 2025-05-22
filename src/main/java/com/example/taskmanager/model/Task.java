@@ -28,17 +28,4 @@ public final class Task {
                 Objects.equals(this.title, that.title) &&
                 Objects.equals(this.description, that.description);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, description);
-    }
-
-    @Override
-    public String toString() {
-        return "Task[" +
-                "getId=" + id + ", " +
-                "title=" + title + ", " +
-                "description=" + description + ']';
-    }
 }
