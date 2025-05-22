@@ -22,41 +22,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class TaskControllerTests {
 
+
+    public static final TaskRequestDTO TASK_REQUEST_DTO_1 = createTaskRequestDto("Title 1", "Description 1");
+    public static final TaskRequestDTO TASK_REQUEST_DTO_2 = createTaskRequestDto("Title 2", "Description 2");
+    public static final TaskResponseDTO TASK_RESPONSE_DTO_1 = createTaskResponseDto(1, "Title 1", "Description 1");
+    public static final TaskResponseDTO TASK_RESPONSE_DTO_2 = createTaskResponseDto(2, "Title 2", "Description 2");
+    public static final TaskResponseDTO TASK_RESPONSE_DTO_3 = createTaskResponseDto(3, "Title 3", "Description 3");
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private TaskService mockTaskService;
 
-    @BeforeEach
-    public void setupMocks() {
-        TaskRequestDTO task1Request = createTaskRequestDto("Title 1", "Description 1");
-        TaskResponseDTO task1Response = createTaskResponseDto(1, "Title 1", "Description 1");
-
-        TaskRequestDTO task2Request = createTaskRequestDto("Title 2", "Description 2");
-        TaskResponseDTO task2Response = createTaskResponseDto(2, "Title 2", "Description 2");
-
-        TaskRequestDTO task3Request = createTaskRequestDto("Title 3", "Description 3");
-        TaskResponseDTO task3Response = createTaskResponseDto(3, "Title 3", "Description 3");
-
-        Task task1 = createTaskObject(1, "Title 1", "Description 1");
-        Task task2 = createTaskObject(2, "Title 2", "Description 2");
-        Task task3 = createTaskObject(3, "Title 3", "Description 3");
-
-        when(mockTaskService.getAllTasks()).thenReturn(List.of(task1, task2, task3));
-
-        when(mockTaskService.createTask(task1Request)).thenReturn(task1Response);
-        when(mockTaskService.createTask(task2Request)).thenReturn(task2Response);
-        when(mockTaskService.createTask(task3Request)).thenReturn(task3Response);
-
-        when(mockTaskService.getTaskById(2)).thenReturn(task2);
-        when(mockTaskService.getTaskByIdAsDto(2)).thenReturn(task2Response);
-        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(List.of(task1Response, task2Response, task3Response));
-
+    private void mockCreateTask(TaskRequestDTO requestDto, TaskResponseDTO responseDTO) {
+        when(mockTaskService.createTask(requestDto)).thenReturn(responseDTO);
     }
 
     @Test
     void shouldReturnAllTasks() throws Exception {
+        when(mockTaskService.getAllTasksAsDTOs()).thenReturn(List.of(TASK_RESPONSE_DTO_1, TASK_RESPONSE_DTO_2, TASK_RESPONSE_DTO_3));
+
         String expectedJson = """
             [
                 {
@@ -84,6 +70,9 @@ public class TaskControllerTests {
 
     @Test
     void shouldReturnTheCorrectTaskAfterTaskCreation() throws Exception {
+        mockCreateTask(TASK_REQUEST_DTO_1, TASK_RESPONSE_DTO_1);
+        mockCreateTask(TASK_REQUEST_DTO_2, TASK_RESPONSE_DTO_2);
+
         String task1Json = """
             {
                 "title": "Title 1",
@@ -129,6 +118,8 @@ public class TaskControllerTests {
 
     @Test
     void shouldReturnCorrectTaskById() throws Exception {
+        when(mockTaskService.getTaskByIdAsDto(2)).thenReturn(TASK_RESPONSE_DTO_2);
+
         String expectedTaskJson = """
             {
                 "id": 2,
@@ -146,7 +137,7 @@ public class TaskControllerTests {
 
     @Test
     void shouldDeleteTask() throws Exception {
-        Task taskToBeDeleted =createTaskObject(42, "Task", "To delete");
+        Task taskToBeDeleted = createTaskObject(42, "Task", "To delete");
 
         when(mockTaskService.getTaskById(42)).thenReturn(taskToBeDeleted);
         doNothing().when(mockTaskService).deleteTask(taskToBeDeleted);
@@ -184,7 +175,7 @@ public class TaskControllerTests {
         TaskRequestDTO requestDTO = createTaskRequestDto("New Task", "Some Description");
         TaskResponseDTO responseDTO = createTaskResponseDto(1, "New Task", "Some Description");
 
-        when(mockTaskService.createTask(requestDTO)).thenReturn(responseDTO);
+        mockCreateTask(requestDTO, responseDTO);
 
         String requestJson = """
             {
