@@ -1,6 +1,5 @@
 package com.example.taskmanager.utility;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.junit.jupiter.api.Test;
 
 import static com.example.taskmanager.utility.JsonUtils.toJson;
@@ -18,11 +17,7 @@ class JsonUtilsTest {
         }
     }
 
-    static class NotSerializable {
-        // Jackson cannot serialize this field
-        @JsonIgnore
-        public Runnable callback = () -> {};
-    }
+    static class NotSerializable {}
 
     @Test
     void givenSerializableObject_whenConvertingToJson_thenReturnValidJson() {
